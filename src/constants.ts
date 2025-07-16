@@ -1,3 +1,4 @@
+export const PROTOCOL_VERSION = "1";
 export const PROTOCOL_PREFIX = "codi";
 export const CODE_LENGTH = 8;
 export const CODE_TTL = 1000 * 60 * 2; // 2 minutes

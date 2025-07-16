@@ -67,7 +67,7 @@ export class CodeGenerator {
     }
 
     /**
-     * Generate the message that should be signed for code verification, from a timestamp
+     * Generate the message that should be signed for code verification from timestamp
      * @param code - The generated 8-digit code
      * @param timestamp - UNIX timestamp in milliseconds
      * @returns Message string in format "codi:<code>:<slot>"
