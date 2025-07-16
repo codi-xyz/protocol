@@ -1,5 +1,5 @@
 import { SolanaCodeValidator } from './validator';
-import { CodeValidator } from '../../validation/validator';
+import { CodeValidator } from '../../validator';
 import { PROTOCOL_PREFIX, CODE_TTL } from '../../constants';
 import nacl from 'tweetnacl';
 import { Keypair } from '@solana/web3.js';

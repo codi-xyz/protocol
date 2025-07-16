@@ -1,5 +1,5 @@
-import { CODE_LENGTH, CODE_TTL, MAX_DRIFT } from "../constants";
-import { CodeGenerator } from "../codegen";
+import { CODE_LENGTH, CODE_TTL, MAX_DRIFT } from "./constants";
+import { CodeGenerator } from "./codegen";
 
 /**
  * Validation strategy interface
@@ -76,16 +76,6 @@ export class CodeValidator {
      */
     validateCodeFormat(code: string): boolean {
         return code.length === CODE_LENGTH && /^\d+$/.test(code);
-    }
-
-    /**
-     * Check if a timestamp is within the valid time window
-     * @param _timestamp - The timestamp to check
-     * @returns True if the timestamp is valid, false otherwise
-     */
-    isInValidTimeWindow(_timestamp: number): boolean {
-        // Drift is now handled in isValid
-        return true;
     }
 
     /**

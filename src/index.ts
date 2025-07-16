@@ -2,4 +2,4 @@ export * from './adapters/solana';
 export * from './codegen';
 export * from './constants';
 export * from './meta';
-export * from './validation/validator';
+export * from './validator';

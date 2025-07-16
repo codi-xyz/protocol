@@ -6,7 +6,7 @@ This document contains the official Action Codes specifications under AIPs (Acti
 
 ## Available Languages
 
-- [English](/en/)
+- [English](./en/aips/aip-0.md)
 - More languages coming soon...
 
 ## Specifications

@@ -1,6 +1,6 @@
 import nacl from "tweetnacl";
 import { PublicKey } from '@solana/web3.js'
-import type { ValidationStrategy } from '../../validation/validator'
+import type { ValidationStrategy } from '../../validator'
 
 export const SolanaCodeValidator: ValidationStrategy = {
     verify(message, signature, publicKey) {
@@ -12,7 +12,7 @@ export const SolanaCodeValidator: ValidationStrategy = {
                 signature,
                 publicKeyBytes
             );
-        } catch (error) {
+        } catch {
             return false;
         }
     },

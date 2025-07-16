@@ -1,13 +1,26 @@
-import js from "@eslint/js";
-import globals from "globals";
-import jest from "eslint-plugin-jest";
-import tseslint from "typescript-eslint";
-import { defineConfig } from "eslint/config";
-
-
-export default defineConfig([
-  { files: ["**/*.{js,mjs,cjs,ts,mts,cts}"], plugins: { js }, extends: ["js/recommended"] },
-  { files: ["**/*.{js,mjs,cjs,ts,mts,cts}"], languageOptions: { globals: { ...globals.browser, ...globals.node } } },
-  jest.environments.globals.globals,
-  tseslint.configs.recommended,
-]);
+export default [
+  {
+    files: ["**/*.ts", "**/*.tsx"],
+    ignores: [
+      "dist/**",
+      "node_modules/**",
+      "**/*.d.ts",
+      "jest.config.ts"
+    ],
+    plugins: {
+      "@typescript-eslint": (await import("@typescript-eslint/eslint-plugin")).default
+    },
+    languageOptions: {
+      parser: (await import("@typescript-eslint/parser")).default,
+      parserOptions: {
+        sourceType: "module"
+      },
+    },
+    rules: {
+      "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/explicit-module-boundary-types": "off",
+    },
+    settings: {
+    },
+  },
+];
