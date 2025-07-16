@@ -2,8 +2,14 @@
   "name": "@codi-xyz/protocol",
   "version": "1.0.0",
   "description": "Action Codes Protocol",
-  "main": "src/index.ts",
+  "main": "src/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "pnpm run lint && pnpm run test && pnpm run build:js",
     "build:js": "tsc",
@@ -19,7 +25,16 @@
     "publish:dry": "pnpm run lint && pnpm build && pnpm publish --access public --dry-run",
     "prepare": "husky"
   },
-  "keywords": [],
+  "keywords": [
+    "solana",
+    "action-codes",
+    "action-codes-protocol",
+    "action-codes-sdk",
+    "action-codes-utils",
+    "action-codes-types",
+    "action-codes-constants",
+    "codi"
+  ],
   "author": "Codi Core Team",
   "license": "Apache-2.0",
   "copyright": "Copyright 2025 Codi",
@@ -33,6 +48,13 @@
     "tag": "latest",
     "access": "public"
   },
+  "files": [
+    "docs",
+    "dist",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ],
   "packageManager": "pnpm@10.13.1",
   "devDependencies": {
     "@babel/preset-env": "^7.28.0",

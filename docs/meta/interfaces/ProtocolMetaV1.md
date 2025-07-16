@@ -1,0 +1,59 @@
+[**@codi-xyz/protocol**](../../README.md)
+
+***
+
+[@codi-xyz/protocol](../../modules.md) / [meta](../README.md) / ProtocolMetaV1
+
+# Interface: ProtocolMetaV1
+
+Defined in: [meta.ts:7](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/meta.ts#L7)
+
+Protocol meta structure for code verification
+
+## Properties
+
+### id
+
+> **id**: `string`
+
+Defined in: [meta.ts:11](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/meta.ts#L11)
+
+***
+
+### initiator
+
+> **initiator**: `string`
+
+Defined in: [meta.ts:10](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/meta.ts#L10)
+
+***
+
+### iss
+
+> **iss**: `string`
+
+Defined in: [meta.ts:12](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/meta.ts#L12)
+
+***
+
+### params?
+
+> `optional` **params**: `string`
+
+Defined in: [meta.ts:13](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/meta.ts#L13)
+
+***
+
+### prefix
+
+> **prefix**: `string`
+
+Defined in: [meta.ts:9](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/meta.ts#L9)
+
+***
+
+### version
+
+> **version**: `string`
+
+Defined in: [meta.ts:8](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/meta.ts#L8)
