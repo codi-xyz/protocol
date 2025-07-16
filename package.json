@@ -52,6 +52,7 @@
     "docs",
     "dist",
     "package.json",
+    "CHANGELOG.md",
     "README.md",
     "LICENSE"
   ],
