@@ -1,0 +1,39 @@
+{
+  "name": "@codi-xyz/protocol",
+  "version": "1.0.0",
+  "description": "One-Time Action Codes Protocol",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "Apache-2.0",
+  "copyright": "Copyright 2025 Codi Inc.",
+  "homepage": "https://codi.so",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codi-xyz/protocol"
+  },
+  "packageManager": "pnpm@10.13.1",
+  "devDependencies": {
+    "@babel/preset-env": "^7.28.0",
+    "@babel/preset-typescript": "^7.27.1",
+    "@eslint/js": "^9.31.0",
+    "@types/jest": "^30.0.0",
+    "eslint": "^9.31.0",
+    "eslint-plugin-jest": "^29.0.1",
+    "globals": "^16.3.0",
+    "jest": "^30.0.4",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.37.0"
+  },
+  "dependencies": {
+    "@solana/spl-memo": "^0.2.5",
+    "@solana/web3.js": "^1.98.2",
+    "js-sha256": "^0.11.1",
+    "tweetnacl": "^1.0.3"
+  }
+}
