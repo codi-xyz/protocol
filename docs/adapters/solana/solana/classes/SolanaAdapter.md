@@ -6,7 +6,7 @@
 
 # Class: SolanaAdapter
 
-Defined in: [adapters/solana/solana.ts:11](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/adapters/solana/solana.ts#L11)
+Defined in: [adapters/solana/solana.ts:11](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/adapters/solana/solana.ts#L11)
 
 Solana adapter for protocol meta using memo program
 
@@ -30,7 +30,7 @@ Solana adapter for protocol meta using memo program
 
 > **decode**(`transaction`): `null` \| [`ProtocolMetaV1`](../../../../meta/interfaces/ProtocolMetaV1.md)
 
-Defined in: [adapters/solana/solana.ts:29](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/adapters/solana/solana.ts#L29)
+Defined in: [adapters/solana/solana.ts:29](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/adapters/solana/solana.ts#L29)
 
 Decode protocol meta from Solana transaction
 
@@ -58,7 +58,7 @@ Decoded ProtocolMetaV1 or null if not found
 
 > **encode**(`meta`): `TransactionInstruction`
 
-Defined in: [adapters/solana/solana.ts:19](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/adapters/solana/solana.ts#L19)
+Defined in: [adapters/solana/solana.ts:19](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/adapters/solana/solana.ts#L19)
 
 Encode protocol meta as a Solana memo instruction
 
@@ -86,7 +86,7 @@ TransactionInstruction for the memo
 
 > **validateTransaction**(`transaction`, `authorities`, `expectedPrefix`): `boolean`
 
-Defined in: [adapters/solana/solana.ts:62](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/adapters/solana/solana.ts#L62)
+Defined in: [adapters/solana/solana.ts:62](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/adapters/solana/solana.ts#L62)
 
 Validate transaction with protocol meta and authority list
 
@@ -126,7 +126,7 @@ True if transaction is valid
 
 > `static` **createTransactionWithMeta**(`meta`, `instructions`): `Transaction`
 
-Defined in: [adapters/solana/solana.ts:83](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/adapters/solana/solana.ts#L83)
+Defined in: [adapters/solana/solana.ts:83](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/adapters/solana/solana.ts#L83)
 
 Create a transaction with protocol meta memo
 

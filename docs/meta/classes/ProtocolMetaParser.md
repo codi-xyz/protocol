@@ -6,7 +6,7 @@
 
 # Class: ProtocolMetaParser
 
-Defined in: [meta.ts:19](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/meta.ts#L19)
+Defined in: [meta.ts:19](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/meta.ts#L19)
 
 Protocol meta parser for structured memo/message parsing
 
@@ -26,7 +26,7 @@ Protocol meta parser for structured memo/message parsing
 
 > `static` **fromInitiator**(`initiator`, `iss`, `prefix`, `params?`): [`ProtocolMetaV1`](../interfaces/ProtocolMetaV1.md)
 
-Defined in: [meta.ts:73](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/meta.ts#L73)
+Defined in: [meta.ts:73](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/meta.ts#L73)
 
 Create protocol meta from code and parameters
 
@@ -68,7 +68,7 @@ ProtocolMeta object
 
 > `static` **parse**(`metaString`): `null` \| [`ProtocolMetaV1`](../interfaces/ProtocolMetaV1.md)
 
-Defined in: [meta.ts:27](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/meta.ts#L27)
+Defined in: [meta.ts:27](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/meta.ts#L27)
 
 Parse protocol meta from string
 
@@ -92,7 +92,7 @@ Parsed ProtocolMeta object or null if invalid
 
 > `static` **serialize**(`meta`): `string`
 
-Defined in: [meta.ts:55](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/meta.ts#L55)
+Defined in: [meta.ts:55](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/meta.ts#L55)
 
 Serialize ProtocolMeta to string
 
@@ -116,7 +116,7 @@ Serialized protocol meta string
 
 > `static` **validateCode**(`meta`): `boolean`
 
-Defined in: [meta.ts:96](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/meta.ts#L96)
+Defined in: [meta.ts:96](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/meta.ts#L96)
 
 Validate if a code matches the protocol meta
 
@@ -140,7 +140,7 @@ True if the meta is valid
 
 > `static` **validateMetaFromString**(`metaString`): `boolean`
 
-Defined in: [meta.ts:106](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/meta.ts#L106)
+Defined in: [meta.ts:106](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/meta.ts#L106)
 
 Validate if a code matches the protocol meta by parsing from string
 

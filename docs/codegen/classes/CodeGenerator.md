@@ -6,7 +6,7 @@
 
 # Class: CodeGenerator
 
-Defined in: [codegen.ts:4](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/codegen.ts#L4)
+Defined in: [codegen.ts:4](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/codegen.ts#L4)
 
 ## Constructors
 
@@ -24,7 +24,7 @@ Defined in: [codegen.ts:4](https://github.com/codi-xyz/protocol/blob/7dd35660b72
 
 > `static` **CODE\_DIGITS**: `number` = `CODE_LENGTH`
 
-Defined in: [codegen.ts:6](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/codegen.ts#L6)
+Defined in: [codegen.ts:6](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/codegen.ts#L6)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [codegen.ts:6](https://github.com/codi-xyz/protocol/blob/7dd35660b72
 
 > `static` **TIME\_WINDOW\_MS**: `number` = `CODE_TTL`
 
-Defined in: [codegen.ts:5](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/codegen.ts#L5)
+Defined in: [codegen.ts:5](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/codegen.ts#L5)
 
 ## Methods
 
@@ -40,7 +40,7 @@ Defined in: [codegen.ts:5](https://github.com/codi-xyz/protocol/blob/7dd35660b72
 
 > `static` **deriveCodeHash**(`pubkey`, `prefix`, `timestamp?`): `string`
 
-Defined in: [codegen.ts:48](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/codegen.ts#L48)
+Defined in: [codegen.ts:48](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/codegen.ts#L48)
 
 Derive the full SHA-256 hash for storage or encryption key generation
 
@@ -76,7 +76,7 @@ Full SHA-256 hash string
 
 > `static` **generateCode**(`pubkey`, `prefix`, `timestamp?`): `string`
 
-Defined in: [codegen.ts:24](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/codegen.ts#L24)
+Defined in: [codegen.ts:24](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/codegen.ts#L24)
 
 Generate a deterministic 8-digit code based on public key, prefix, and time slot
 
@@ -112,7 +112,7 @@ UNIX timestamp in milliseconds (defaults to now)
 
 > `static` **generateCodeSignatureMessage**(`code`, `slot`): `string`
 
-Defined in: [codegen.ts:65](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/codegen.ts#L65)
+Defined in: [codegen.ts:65](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/codegen.ts#L65)
 
 Generate the message that should be signed for code verification
 
@@ -142,7 +142,7 @@ Message string in format "codi:<code>:<slot>"
 
 > `static` **generateCodeSignatureMessageFromTimestamp**(`code`, `timestamp`): `string`
 
-Defined in: [codegen.ts:75](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/codegen.ts#L75)
+Defined in: [codegen.ts:75](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/codegen.ts#L75)
 
 Generate the message that should be signed for code verification from timestamp
 
@@ -172,7 +172,7 @@ Message string in format "codi:<code>:<slot>"
 
 > `static` **getExpectedCode**(`pubkey`, `slot`, `prefix`): `string`
 
-Defined in: [codegen.ts:87](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/codegen.ts#L87)
+Defined in: [codegen.ts:87](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/codegen.ts#L87)
 
 Get the expected code for a given public key and time slot
 
@@ -208,7 +208,7 @@ Optional namespace prefix (default: "DEFAULT")
 
 > `static` **getSlotTimeRange**(`slot`): `object`
 
-Defined in: [codegen.ts:119](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/codegen.ts#L119)
+Defined in: [codegen.ts:119](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/codegen.ts#L119)
 
 Get the time range for a given slot
 
@@ -240,7 +240,7 @@ Object with start and end timestamps
 
 > `static` **getTimeSlot**(`timestamp`): `number`
 
-Defined in: [codegen.ts:13](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/codegen.ts#L13)
+Defined in: [codegen.ts:13](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/codegen.ts#L13)
 
 Get the current time slot based on timestamp
 
@@ -264,7 +264,7 @@ Time slot number
 
 > `static` **isValidTimestamp**(`timestamp`): `boolean`
 
-Defined in: [codegen.ts:130](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/codegen.ts#L130)
+Defined in: [codegen.ts:130](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/codegen.ts#L130)
 
 Check if a timestamp falls within a valid time window
 
@@ -288,7 +288,7 @@ True if timestamp is valid
 
 > `static` **validateCode**(`code`, `pubkey`, `slot`, `prefix`): `boolean`
 
-Defined in: [codegen.ts:104](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/codegen.ts#L104)
+Defined in: [codegen.ts:104](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/codegen.ts#L104)
 
 Validate if a code matches the expected code for a given public key and time slot
 

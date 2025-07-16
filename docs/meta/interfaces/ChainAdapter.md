@@ -6,7 +6,7 @@
 
 # Interface: ChainAdapter
 
-Defined in: [meta.ts:118](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/meta.ts#L118)
+Defined in: [meta.ts:118](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/meta.ts#L118)
 
 Base adapter interface for chain-specific implementations
 
@@ -16,7 +16,7 @@ Base adapter interface for chain-specific implementations
 
 > **decode**(`data`): `null` \| [`ProtocolMetaV1`](ProtocolMetaV1.md)
 
-Defined in: [meta.ts:131](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/meta.ts#L131)
+Defined in: [meta.ts:131](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/meta.ts#L131)
 
 Decode protocol meta from chain-specific data
 
@@ -40,7 +40,7 @@ Decoded ProtocolMeta or null if invalid
 
 > **encode**(`meta`): `any`
 
-Defined in: [meta.ts:124](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/meta.ts#L124)
+Defined in: [meta.ts:124](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/meta.ts#L124)
 
 Encode protocol meta for the specific chain
 
@@ -64,7 +64,7 @@ Chain-specific encoded data
 
 > **validateTransaction**(`transaction`, `authorities?`, `expectedPrefix?`): `boolean`
 
-Defined in: [meta.ts:140](https://github.com/codi-xyz/protocol/blob/7dd35660b72e021f0aea9ce5abeac1856fc6b63b/src/meta.ts#L140)
+Defined in: [meta.ts:140](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/meta.ts#L140)
 
 Validate transaction with protocol meta
 
