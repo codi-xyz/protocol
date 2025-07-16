@@ -16,7 +16,8 @@
     "release:patch": "pnpm run lint && pnpm version patch && pnpm build && pnpm publish --access public",
     "release:minor": "pnpm run lint && pnpm version minor && pnpm build && pnpm publish --access public",
     "release:major": "pnpm run lint && pnpm version major && pnpm build && pnpm publish --access public",
-    "publish:dry": "pnpm run lint && pnpm build && pnpm publish --access public --dry-run"
+    "publish:dry": "pnpm run lint && pnpm build && pnpm publish --access public --dry-run",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "Codi Core Team",
@@ -49,6 +50,7 @@
     "eslint": "^9.31.0",
     "eslint-plugin-jest": "^29.0.1",
     "globals": "^16.3.0",
+    "husky": "^9.1.7",
     "jest": "^30.0.4",
     "semantic-release": "^24.2.7",
     "typedoc-plugin-markdown": "^4.6.3",
