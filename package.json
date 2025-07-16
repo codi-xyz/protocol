@@ -58,8 +58,6 @@
   ],
   "packageManager": "pnpm@10.13.1",
   "devDependencies": {
-    "@babel/preset-env": "^7.28.0",
-    "@babel/preset-typescript": "^7.27.1",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@eslint/js": "^9.31.0",
@@ -76,6 +74,8 @@
     "husky": "^9.1.7",
     "jest": "^30.0.4",
     "semantic-release": "^24.2.7",
+    "ts-jest": "^29.4.0",
+    "ts-node": "^10.9.2",
     "typedoc-plugin-markdown": "^4.6.3",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.37.0"
