@@ -1,7 +1,7 @@
 {
   "name": "@codi-xyz/protocol",
   "version": "1.0.0",
-  "description": "One-Time Action Codes Protocol",
+  "description": "Action Codes Protocol",
   "main": "src/index.ts",
   "scripts": {
     "build": "tsc",
@@ -9,9 +9,9 @@
     "test:watch": "jest --watch"
   },
   "keywords": [],
-  "author": "",
+  "author": "Codi Core Team",
   "license": "Apache-2.0",
-  "copyright": "Copyright 2025 Codi Inc.",
+  "copyright": "Copyright 2025 Codi",
   "homepage": "https://codi.so",
   "repository": {
     "type": "git",
