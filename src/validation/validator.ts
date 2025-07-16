@@ -48,7 +48,7 @@ export class CodeValidator {
      * @returns True if the code is valid, false otherwise
      */
     isValid(code: string, pubkey: string, signature: Uint8Array, currentTime?: number): boolean {
-        // 1️⃣ Validate code format
+        // Validate code format
         if (!this.validateCodeFormat(code)) {
             return false;
         }
@@ -56,11 +56,11 @@ export class CodeValidator {
         const now = currentTime || Date.now();
         const currentSlot = this.getTimeSlot(now).slot;
 
-        // 2️⃣ Check ±MAX_DRIFT slots
+        // Check ±MAX_DRIFT slots
         for (let drift = -MAX_DRIFT; drift <= MAX_DRIFT; drift++) {
             const slotToCheck = currentSlot + drift;
             if (slotToCheck < 0) continue;
-            // 3️⃣ Verify signature over codi:<code>:<slot>
+            // Verify signature over codi:<code>:<slot>
             const message = this.getValidationMessage(code, slotToCheck);
             if (this.validator.verify(message, signature, pubkey)) {
                 return true;
