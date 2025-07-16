@@ -6,7 +6,7 @@
 
 # Interface: ValidationStrategy
 
-Defined in: [validator.ts:7](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/validator.ts#L7)
+Defined in: [validator.ts:7](https://github.com/codi-xyz/protocol/blob/002e813eac9470bcfdb2a1790ddea7c341cb39dd/src/validator.ts#L7)
 
 Validation strategy interface
 
@@ -16,7 +16,7 @@ Validation strategy interface
 
 > **verify**: (`message`, `signature`, `publicKey`) => `boolean`
 
-Defined in: [validator.ts:15](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/validator.ts#L15)
+Defined in: [validator.ts:15](https://github.com/codi-xyz/protocol/blob/002e813eac9470bcfdb2a1790ddea7c341cb39dd/src/validator.ts#L15)
 
 Verify a signature against a message
 

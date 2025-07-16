@@ -6,7 +6,7 @@
 
 # Class: CodeValidator
 
-Defined in: [validator.ts:33](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/validator.ts#L33)
+Defined in: [validator.ts:33](https://github.com/codi-xyz/protocol/blob/002e813eac9470bcfdb2a1790ddea7c341cb39dd/src/validator.ts#L33)
 
 Code validator class
 
@@ -16,7 +16,7 @@ Code validator class
 
 > **new CodeValidator**(`validator`): `CodeValidator`
 
-Defined in: [validator.ts:38](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/validator.ts#L38)
+Defined in: [validator.ts:38](https://github.com/codi-xyz/protocol/blob/002e813eac9470bcfdb2a1790ddea7c341cb39dd/src/validator.ts#L38)
 
 Constructor
 
@@ -38,7 +38,7 @@ The validation strategy to use
 
 > **deriveCode**(`pubkey`, `slot`, `prefix`): `string`
 
-Defined in: [validator.ts:111](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/validator.ts#L111)
+Defined in: [validator.ts:111](https://github.com/codi-xyz/protocol/blob/002e813eac9470bcfdb2a1790ddea7c341cb39dd/src/validator.ts#L111)
 
 Derive a code
 
@@ -74,7 +74,7 @@ The derived code
 
 > **getTimeSlot**(`timestamp`): [`TimeSlot`](../interfaces/TimeSlot.md)
 
-Defined in: [validator.ts:86](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/validator.ts#L86)
+Defined in: [validator.ts:86](https://github.com/codi-xyz/protocol/blob/002e813eac9470bcfdb2a1790ddea7c341cb39dd/src/validator.ts#L86)
 
 Get the time slot for a timestamp
 
@@ -98,7 +98,7 @@ The time slot
 
 > **getValidationMessage**(`code`, `slot`): `Uint8Array`
 
-Defined in: [validator.ts:100](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/validator.ts#L100)
+Defined in: [validator.ts:100](https://github.com/codi-xyz/protocol/blob/002e813eac9470bcfdb2a1790ddea7c341cb39dd/src/validator.ts#L100)
 
 Get the validation message for a code
 
@@ -128,7 +128,7 @@ The validation message
 
 > **isValid**(`code`, `pubkey`, `signature`, `currentTime?`): `boolean`
 
-Defined in: [validator.ts:50](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/validator.ts#L50)
+Defined in: [validator.ts:50](https://github.com/codi-xyz/protocol/blob/002e813eac9470bcfdb2a1790ddea7c341cb39dd/src/validator.ts#L50)
 
 Validate a code
 
@@ -170,7 +170,7 @@ True if the code is valid, false otherwise
 
 > **validateCodeFormat**(`code`): `boolean`
 
-Defined in: [validator.ts:77](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/validator.ts#L77)
+Defined in: [validator.ts:77](https://github.com/codi-xyz/protocol/blob/002e813eac9470bcfdb2a1790ddea7c341cb39dd/src/validator.ts#L77)
 
 Validate the format of a code
 
@@ -194,7 +194,7 @@ True if the code is valid, false otherwise
 
 > **validateWithDerivation**(`pubkey`, `signature`, `currentTime?`, `prefix?`): `boolean`
 
-Defined in: [validator.ts:123](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/validator.ts#L123)
+Defined in: [validator.ts:123](https://github.com/codi-xyz/protocol/blob/002e813eac9470bcfdb2a1790ddea7c341cb39dd/src/validator.ts#L123)
 
 Complete validation with code derivation
 

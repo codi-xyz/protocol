@@ -8,4 +8,4 @@
 
 > `const` **PROTOCOL\_VERSION**: `"1"` = `"1"`
 
-Defined in: [constants.ts:1](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/constants.ts#L1)
+Defined in: [constants.ts:1](https://github.com/codi-xyz/protocol/blob/002e813eac9470bcfdb2a1790ddea7c341cb39dd/src/constants.ts#L1)

@@ -8,4 +8,4 @@
 
 > `const` **SolanaCodeValidator**: [`ValidationStrategy`](../../../../validator/interfaces/ValidationStrategy.md)
 
-Defined in: [adapters/solana/validator.ts:5](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/adapters/solana/validator.ts#L5)
+Defined in: [adapters/solana/validator.ts:5](https://github.com/codi-xyz/protocol/blob/002e813eac9470bcfdb2a1790ddea7c341cb39dd/src/adapters/solana/validator.ts#L5)

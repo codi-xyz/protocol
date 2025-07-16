@@ -6,9 +6,10 @@
 
 # Class: SolanaAdapter
 
-Defined in: [adapters/solana/solana.ts:11](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/adapters/solana/solana.ts#L11)
+Defined in: [adapters/solana/solana.ts:15](https://github.com/codi-xyz/protocol/blob/002e813eac9470bcfdb2a1790ddea7c341cb39dd/src/adapters/solana/solana.ts#L15)
 
 Solana adapter for protocol meta using memo program
+Supports both legacy and versioned transactions
 
 ## Implements
 
@@ -30,17 +31,17 @@ Solana adapter for protocol meta using memo program
 
 > **decode**(`transaction`): `null` \| [`ProtocolMetaV1`](../../../../meta/interfaces/ProtocolMetaV1.md)
 
-Defined in: [adapters/solana/solana.ts:29](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/adapters/solana/solana.ts#L29)
+Defined in: [adapters/solana/solana.ts:33](https://github.com/codi-xyz/protocol/blob/002e813eac9470bcfdb2a1790ddea7c341cb39dd/src/adapters/solana/solana.ts#L33)
 
-Decode protocol meta from Solana transaction
+Decode protocol meta from Solana transaction (legacy or versioned)
 
 #### Parameters
 
 ##### transaction
 
-`Transaction`
-
 The Solana transaction to decode
+
+`Transaction` | `VersionedTransaction`
 
 #### Returns
 
@@ -58,7 +59,7 @@ Decoded ProtocolMetaV1 or null if not found
 
 > **encode**(`meta`): `TransactionInstruction`
 
-Defined in: [adapters/solana/solana.ts:19](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/adapters/solana/solana.ts#L19)
+Defined in: [adapters/solana/solana.ts:23](https://github.com/codi-xyz/protocol/blob/002e813eac9470bcfdb2a1790ddea7c341cb39dd/src/adapters/solana/solana.ts#L23)
 
 Encode protocol meta as a Solana memo instruction
 
@@ -86,17 +87,18 @@ TransactionInstruction for the memo
 
 > **validateTransaction**(`transaction`, `authorities`, `expectedPrefix`): `boolean`
 
-Defined in: [adapters/solana/solana.ts:62](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/adapters/solana/solana.ts#L62)
+Defined in: [adapters/solana/solana.ts:133](https://github.com/codi-xyz/protocol/blob/002e813eac9470bcfdb2a1790ddea7c341cb39dd/src/adapters/solana/solana.ts#L133)
 
 Validate transaction with protocol meta and authority list
+Supports both legacy and versioned transactions
 
 #### Parameters
 
 ##### transaction
 
-`Transaction`
-
 The Solana transaction to validate
+
+`Transaction` | `VersionedTransaction`
 
 ##### authorities
 
@@ -126,9 +128,9 @@ True if transaction is valid
 
 > `static` **createTransactionWithMeta**(`meta`, `instructions`): `Transaction`
 
-Defined in: [adapters/solana/solana.ts:83](https://github.com/codi-xyz/protocol/blob/61f4e6c7b65c0d9d7ab439e1cd6f938b1016009d/src/adapters/solana/solana.ts#L83)
+Defined in: [adapters/solana/solana.ts:221](https://github.com/codi-xyz/protocol/blob/002e813eac9470bcfdb2a1790ddea7c341cb39dd/src/adapters/solana/solana.ts#L221)
 
-Create a transaction with protocol meta memo
+Create a legacy transaction with protocol meta memo
 
 #### Parameters
 
@@ -149,3 +151,39 @@ Additional transaction instructions
 `Transaction`
 
 Transaction with memo instruction
+
+***
+
+### createVersionedTransactionWithMeta()
+
+> `static` **createVersionedTransactionWithMeta**(`meta`, `instructions`, `feePayer`): `VersionedTransaction`
+
+Defined in: [adapters/solana/solana.ts:241](https://github.com/codi-xyz/protocol/blob/002e813eac9470bcfdb2a1790ddea7c341cb39dd/src/adapters/solana/solana.ts#L241)
+
+Create a versioned transaction with protocol meta memo
+
+#### Parameters
+
+##### meta
+
+[`ProtocolMetaV1`](../../../../meta/interfaces/ProtocolMetaV1.md)
+
+The protocol meta to include
+
+##### instructions
+
+`TransactionInstruction`[] = `[]`
+
+Additional transaction instructions
+
+##### feePayer
+
+`string`
+
+The fee payer public key
+
+#### Returns
+
+`VersionedTransaction`
+
+VersionedTransaction with memo instruction
