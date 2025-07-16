@@ -3,6 +3,7 @@ import { CodeValidator } from './validator';
 import { PROTOCOL_PREFIX, CODE_TTL } from '../constants';
 import nacl from 'tweetnacl';
 import { Keypair } from '@solana/web3.js';
+import { CodeGenerator } from '../codegen';
 
 describe('SolanaCodeValidator', () => {
     let keypair: Keypair;
@@ -348,9 +349,9 @@ describe('CodeValidator with Solana', () => {
             // Derive the expected code
             const expectedCode = validator.deriveCode(keypair.publicKey.toString(), slot);
 
-            // Create signature for the derived code
-            const message = new TextEncoder().encode(`${PROTOCOL_PREFIX}${expectedCode}:${slot}`);
-            const signature = nacl.sign.detached(message, keypair.secretKey);
+            // Create signature for the derived code using the correct message format
+            const message = CodeGenerator.generateCodeSignatureMessage(expectedCode, slot);
+            const signature = nacl.sign.detached(new TextEncoder().encode(message), keypair.secretKey);
 
             const result = validator.validateWithDerivation(keypair.publicKey.toString(), signature, currentTime);
 
@@ -369,6 +370,39 @@ describe('CodeValidator with Solana', () => {
 
             const result = validator.validateWithDerivation(keypair.publicKey.toString(), wrongSignature, currentTime);
 
+            expect(result).toBe(false);
+        });
+    });
+
+    describe('Drift Window', () => {
+        it('should accept code/signature from previous slot if within MAX_DRIFT', () => {
+            const slot = 12345;
+            const prevSlot = slot - 1;
+            const currentTime = slot * CODE_TTL + 1000;
+            const code = validator.deriveCode(keypair.publicKey.toString(), prevSlot);
+            const message = CodeGenerator.generateCodeSignatureMessage(code, prevSlot);
+            const signature = nacl.sign.detached(new TextEncoder().encode(message), keypair.secretKey);
+            const result = validator.isValid(code, keypair.publicKey.toString(), signature, currentTime);
+            expect(result).toBe(true);
+        });
+        it('should accept code/signature from next slot if within MAX_DRIFT', () => {
+            const slot = 12345;
+            const nextSlot = slot + 1;
+            const currentTime = slot * CODE_TTL + 1000;
+            const code = validator.deriveCode(keypair.publicKey.toString(), nextSlot);
+            const message = CodeGenerator.generateCodeSignatureMessage(code, nextSlot);
+            const signature = nacl.sign.detached(new TextEncoder().encode(message), keypair.secretKey);
+            const result = validator.isValid(code, keypair.publicKey.toString(), signature, currentTime);
+            expect(result).toBe(true);
+        });
+        it('should reject code/signature from slot outside MAX_DRIFT', () => {
+            const slot = 12345;
+            const farSlot = slot + 2; // MAX_DRIFT is 1
+            const currentTime = slot * CODE_TTL + 1000;
+            const code = validator.deriveCode(keypair.publicKey.toString(), farSlot);
+            const message = CodeGenerator.generateCodeSignatureMessage(code, farSlot);
+            const signature = nacl.sign.detached(new TextEncoder().encode(message), keypair.secretKey);
+            const result = validator.isValid(code, keypair.publicKey.toString(), signature, currentTime);
             expect(result).toBe(false);
         });
     });

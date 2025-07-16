@@ -1,6 +1,17 @@
-import { CODE_LENGTH, PROTOCOL_PREFIX, CODE_TTL, CODE_DRIFT_WINDOW } from "../constants";
+import { CODE_LENGTH, CODE_TTL, MAX_DRIFT } from "../constants";
+import { CodeGenerator } from "../codegen";
 
+/**
+ * Validation strategy interface
+ */
 export interface ValidationStrategy {
+    /**
+     * Verify a signature against a message
+     * @param message - The message to verify
+     * @param signature - The signature to verify
+     * @param publicKey - The public key to verify against
+     * @returns True if the signature is valid, false otherwise
+     */
     verify: (
         message: Uint8Array,
         signature: Uint8Array,
@@ -8,48 +19,80 @@ export interface ValidationStrategy {
     ) => boolean;
 }
 
+/**
+ * Time slot interface
+ */
 export interface TimeSlot {
     slot: number;
     timestamp: number;
 }
 
+/**
+ * Code validator class
+ */
 export class CodeValidator {
+    /**
+     * Constructor
+     * @param validator - The validation strategy to use
+     */
     constructor(
         private readonly validator: ValidationStrategy,
     ) { }
 
+    /**
+     * Validate a code
+     * @param code - The code to validate
+     * @param pubkey - The public key to validate against
+     * @param signature - The signature to validate
+     * @param currentTime - The current time
+     * @returns True if the code is valid, false otherwise
+     */
     isValid(code: string, pubkey: string, signature: Uint8Array, currentTime?: number): boolean {
         // 1️⃣ Validate code format
         if (!this.validateCodeFormat(code)) {
             return false;
         }
 
-        // 2️⃣ Validate time window
         const now = currentTime || Date.now();
-        if (!this.isInValidTimeWindow(now)) {
-            return false;
-        }
+        const currentSlot = this.getTimeSlot(now).slot;
 
-        // 3️⃣ Get current time slot
-        const currentSlot = this.getTimeSlot(now);
-        
-        // 4️⃣ Verify signature over codi:<code>:<slot>
-        const message = this.getValidationMessage(code, currentSlot.slot);
-        return this.validator.verify(message, signature, pubkey);
+        // 2️⃣ Check ±MAX_DRIFT slots
+        for (let drift = -MAX_DRIFT; drift <= MAX_DRIFT; drift++) {
+            const slotToCheck = currentSlot + drift;
+            if (slotToCheck < 0) continue;
+            // 3️⃣ Verify signature over codi:<code>:<slot>
+            const message = this.getValidationMessage(code, slotToCheck);
+            if (this.validator.verify(message, signature, pubkey)) {
+                return true;
+            }
+        }
+        return false;
     }
 
+    /**
+     * Validate the format of a code
+     * @param code - The code to validate
+     * @returns True if the code is valid, false otherwise
+     */
     validateCodeFormat(code: string): boolean {
         return code.length === CODE_LENGTH && /^\d+$/.test(code);
     }
 
-    isInValidTimeWindow(timestamp: number): boolean {
-        const currentSlot = this.getTimeSlot(timestamp);
-        const driftSlots = Math.ceil(CODE_DRIFT_WINDOW / CODE_TTL);
-        
-        // Check if we're within the drift window
-        return currentSlot.slot >= 0; // Basic validation, can be enhanced
+    /**
+     * Check if a timestamp is within the valid time window
+     * @param _timestamp - The timestamp to check
+     * @returns True if the timestamp is valid, false otherwise
+     */
+    isInValidTimeWindow(_timestamp: number): boolean {
+        // Drift is now handled in isValid
+        return true;
     }
 
+    /**
+     * Get the time slot for a timestamp
+     * @param timestamp - The timestamp to get the time slot for
+     * @returns The time slot
+     */
     getTimeSlot(timestamp: number): TimeSlot {
         const slot = Math.floor(timestamp / CODE_TTL);
         return {
@@ -58,37 +101,42 @@ export class CodeValidator {
         };
     }
 
+    /**
+     * Get the validation message for a code
+     * @param code - The code to get the validation message for
+     * @param slot - The slot to get the validation message for
+     * @returns The validation message
+     */
     getValidationMessage(code: string, slot: number): Uint8Array {
-        return new TextEncoder().encode(`${PROTOCOL_PREFIX}${code}:${slot}`);
+        return new TextEncoder().encode(CodeGenerator.generateCodeSignatureMessage(code, slot));
     }
 
-    // Helper method to get the expected code for a given pubkey and time slot
-    deriveCode(pubkey: string, slot: number): string {
-        // This would implement the actual code derivation logic
-        // For now, we'll use a simple hash-based approach
-        const message = `${pubkey}:${slot}`;
-        const encoder = new TextEncoder();
-        const data = encoder.encode(message);
-        
-        // Simple hash to generate 8-digit code
-        let hash = 0;
-        for (let i = 0; i < data.length; i++) {
-            hash = ((hash << 5) - hash + data[i]) & 0xffffffff;
-        }
-        
-        // Convert to 8-digit string
-        const code = Math.abs(hash).toString().padStart(8, '0').slice(-8);
-        return code;
+    /**
+     * Derive a code
+     * @param pubkey - The public key to derive the code for
+     * @param slot - The slot to derive the code for
+     * @param prefix - The prefix to use for the code
+     * @returns The derived code
+     */
+    deriveCode(pubkey: string, slot: number, prefix: string = "DEFAULT"): string {
+        return CodeGenerator.getExpectedCode(pubkey, slot, prefix);
     }
 
-    // Complete validation with code derivation
-    validateWithDerivation(pubkey: string, signature: Uint8Array, currentTime?: number): boolean {
+    /**
+     * Complete validation with code derivation
+     * @param pubkey - The public key to validate against
+     * @param signature - The signature to validate
+     * @param currentTime - The current time
+     * @param prefix - The prefix to use for the code
+     * @returns True if the code is valid, false otherwise
+     */
+    validateWithDerivation(pubkey: string, signature: Uint8Array, currentTime?: number, prefix: string = "DEFAULT"): boolean {
         const now = currentTime || Date.now();
         const currentSlot = this.getTimeSlot(now);
-        
-        // Derive the expected code
-        const expectedCode = this.deriveCode(pubkey, currentSlot.slot);
-        
+
+        // Derive the expected code using CodeGenerator
+        const expectedCode = this.deriveCode(pubkey, currentSlot.slot, prefix);
+
         // Validate using the derived code
         return this.isValid(expectedCode, pubkey, signature, now);
     }
