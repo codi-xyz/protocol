@@ -1,4 +1,4 @@
-import { Transaction, Keypair } from '@solana/web3.js';
+import { Transaction, Keypair, VersionedTransaction, MessageV0, PublicKey } from '@solana/web3.js';
 import { createMemoInstruction, MEMO_PROGRAM_ID } from '@solana/spl-memo';
 import { SolanaAdapter } from './solana';
 import { ProtocolMetaV1, ProtocolMetaParser } from '../../meta';
@@ -37,144 +37,276 @@ describe('SolanaAdapter', () => {
   });
 
   describe('decode', () => {
-    it('should decode valid protocol meta from transaction', () => {
-      const metaString = ProtocolMetaParser.serialize(testMeta);
-      const memoInstruction = createMemoInstruction(metaString);
-      const transaction = new Transaction();
-      transaction.add(memoInstruction);
-      transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
-      const result = adapter.decode(transaction);
-      expect(result).toEqual(testMeta);
+    describe('legacy transactions', () => {
+      it('should decode valid protocol meta from transaction', () => {
+        const metaString = ProtocolMetaParser.serialize(testMeta);
+        const memoInstruction = createMemoInstruction(metaString);
+        const transaction = new Transaction();
+        transaction.add(memoInstruction);
+        transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
+        const result = adapter.decode(transaction);
+        expect(result).toEqual(testMeta);
+      });
+      it('should return null for transaction without memo instruction', () => {
+        const transaction = new Transaction();
+        const result = adapter.decode(transaction);
+        expect(result).toBeNull();
+      });
+      it('should return null for memo with wrong protocol prefix', () => {
+        const metaString = `wrong:v=1&pre=DEFAULT&ini=ABC123&id=def456&iss=${defaultIssuer}`;
+        const memoInstruction = createMemoInstruction(metaString);
+        const transaction = new Transaction();
+        transaction.add(memoInstruction);
+        transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
+        const result = adapter.decode(transaction);
+        expect(result).toBeNull();
+      });
+      it('should return null for unsupported protocol version', () => {
+        const metaString = `${PROTOCOL_PREFIX}:v=2&pre=DEFAULT&ini=ABC123&id=def456&iss=${defaultIssuer}`;
+        const memoInstruction = createMemoInstruction(metaString);
+        const transaction = new Transaction();
+        transaction.add(memoInstruction);
+        transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
+        const result = adapter.decode(transaction);
+        expect(result).toBeNull();
+      });
     });
-    it('should return null for transaction without memo instruction', () => {
-      const transaction = new Transaction();
-      const result = adapter.decode(transaction);
-      expect(result).toBeNull();
-    });
-    it('should return null for memo with wrong protocol prefix', () => {
-      const metaString = `wrong:v=1&pre=DEFAULT&ini=ABC123&id=def456&iss=${defaultIssuer}`;
-      const memoInstruction = createMemoInstruction(metaString);
-      const transaction = new Transaction();
-      transaction.add(memoInstruction);
-      transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
-      const result = adapter.decode(transaction);
-      expect(result).toBeNull();
-    });
-    it('should return null for unsupported protocol version', () => {
-      const metaString = `${PROTOCOL_PREFIX}:v=2&pre=DEFAULT&ini=ABC123&id=def456&iss=${defaultIssuer}`;
-      const memoInstruction = createMemoInstruction(metaString);
-      const transaction = new Transaction();
-      transaction.add(memoInstruction);
-      transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
-      const result = adapter.decode(transaction);
-      expect(result).toBeNull();
+
+    describe('versioned transactions', () => {
+      it('should decode valid protocol meta from versioned transaction', () => {
+        const metaString = ProtocolMetaParser.serialize(testMeta);
+        const memoInstruction = createMemoInstruction(metaString);
+        
+        // Create a simple MessageV0 with memo instruction
+        const messageV0 = new MessageV0({
+          header: {
+            numRequiredSignatures: 1,
+            numReadonlySignedAccounts: 0,
+            numReadonlyUnsignedAccounts: 1,
+          },
+          staticAccountKeys: [
+            authority1.publicKey,
+            memoInstruction.programId,
+          ],
+          recentBlockhash: '11111111111111111111111111111111',
+          compiledInstructions: [{
+            programIdIndex: 1, // memoInstruction.programId
+            accountKeyIndexes: [],
+            data: memoInstruction.data,
+          }],
+          addressTableLookups: [],
+        });
+
+        const versionedTransaction = new VersionedTransaction(messageV0);
+        const result = adapter.decode(versionedTransaction);
+        expect(result).toEqual(testMeta);
+      });
+
+      it('should return null for versioned transaction without memo instruction', () => {
+        const messageV0 = new MessageV0({
+          header: {
+            numRequiredSignatures: 1,
+            numReadonlySignedAccounts: 0,
+            numReadonlyUnsignedAccounts: 1,
+          },
+          staticAccountKeys: [authority1.publicKey],
+          recentBlockhash: '11111111111111111111111111111111',
+          compiledInstructions: [],
+          addressTableLookups: [],
+        });
+
+        const versionedTransaction = new VersionedTransaction(messageV0);
+        const result = adapter.decode(versionedTransaction);
+        expect(result).toBeNull();
+      });
+
+      it('should return null for unsupported message version', () => {
+        // Create a mock transaction with unsupported message type
+        const mockTransaction = {
+          message: { version: 'unsupported' },
+        } as any;
+        
+        const result = adapter.decode(mockTransaction);
+        expect(result).toBeNull();
+      });
     });
   });
 
   describe('validateTransaction', () => {
-    it('should validate transaction with correct meta and authority signature', () => {
-      const metaString = ProtocolMetaParser.serialize(testMeta);
-      const memoInstruction = createMemoInstruction(metaString);
-      const transaction = new Transaction();
-      transaction.add(memoInstruction);
-      transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
-      transaction.sign(authority1);
-      const result = adapter.validateTransaction(transaction, mockAuthorities, 'DEFAULT');
-      expect(result).toBe(true);
+    describe('legacy transactions', () => {
+      it('should validate transaction with correct meta and authority signature', () => {
+        const metaString = ProtocolMetaParser.serialize(testMeta);
+        const memoInstruction = createMemoInstruction(metaString);
+        const transaction = new Transaction();
+        transaction.add(memoInstruction);
+        transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
+        transaction.sign(authority1);
+        const result = adapter.validateTransaction(transaction, mockAuthorities, 'DEFAULT');
+        expect(result).toBe(true);
+      });
+      it('should reject transaction without memo instruction', () => {
+        const transaction = new Transaction();
+        transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
+        transaction.sign(authority1);
+        const result = adapter.validateTransaction(transaction, mockAuthorities, 'DEFAULT');
+        expect(result).toBe(false);
+      });
+      it('should reject transaction with missing issuer', () => {
+        // Remove iss from meta string
+        const metaString = `${PROTOCOL_PREFIX}:v=1&pre=DEFAULT&ini=ABC123&id=def456`;
+        const memoInstruction = createMemoInstruction(metaString);
+        const transaction = new Transaction();
+        transaction.add(memoInstruction);
+        transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
+        transaction.sign(authority1);
+        const result = adapter.validateTransaction(transaction, mockAuthorities, 'DEFAULT');
+        expect(result).toBe(false);
+      });
+      it('should reject transaction with wrong issuer', () => {
+        const meta = { ...testMeta, iss: 'NOT_AUTHORITY' };
+        const metaString = ProtocolMetaParser.serialize(meta);
+        const memoInstruction = createMemoInstruction(metaString);
+        const transaction = new Transaction();
+        transaction.add(memoInstruction);
+        transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
+        transaction.sign(authority1);
+        const result = adapter.validateTransaction(transaction, mockAuthorities, 'DEFAULT');
+        expect(result).toBe(false);
+      });
+      it('should reject transaction if no signature matches authority', () => {
+        const metaString = ProtocolMetaParser.serialize(testMeta);
+        const memoInstruction = createMemoInstruction(metaString);
+        const transaction = new Transaction();
+        transaction.add(memoInstruction);
+        transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
+        // Sign with a random keypair not in authorities
+        const randomKeypair = Keypair.generate();
+        transaction.sign(randomKeypair);
+        const result = adapter.validateTransaction(transaction, mockAuthorities, 'DEFAULT');
+        expect(result).toBe(false);
+      });
+      it('should validate if issuer signature matches meta.iss', () => {
+        const metaString = ProtocolMetaParser.serialize(testMeta);
+        const memoInstruction = createMemoInstruction(metaString);
+        const transaction = new Transaction();
+        transaction.add(memoInstruction);
+        transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
+        // Sign with the correct authority (feePayer)
+        transaction.feePayer = authority1.publicKey;
+        transaction.sign(authority1);
+        const result = adapter.validateTransaction(transaction, mockAuthorities, 'DEFAULT');
+        expect(result).toBe(true);
+      });
+      it('should reject if issuer signature does not match meta.iss', () => {
+        const meta = { ...testMeta, iss: authority2.publicKey.toBase58() };
+        const metaString = ProtocolMetaParser.serialize(meta);
+        const memoInstruction = createMemoInstruction(metaString);
+        const transaction = new Transaction();
+        transaction.add(memoInstruction);
+        transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
+        // Sign with authority1, but meta.iss is authority2
+        transaction.sign(authority1);
+        const result = adapter.validateTransaction(transaction, mockAuthorities, 'DEFAULT');
+        expect(result).toBe(false);
+      });
+      it('should reject if prefix does not match expected', () => {
+        const meta = { ...testMeta, prefix: 'OTHER' };
+        const metaString = ProtocolMetaParser.serialize(meta);
+        const memoInstruction = createMemoInstruction(metaString);
+        const transaction = new Transaction();
+        transaction.add(memoInstruction);
+        transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
+        transaction.sign(authority1);
+        const result = adapter.validateTransaction(transaction, mockAuthorities, 'DEFAULT');
+        expect(result).toBe(false);
+      });
     });
-    it('should reject transaction without memo instruction', () => {
-      const transaction = new Transaction();
-      transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
-      transaction.sign(authority1);
-      const result = adapter.validateTransaction(transaction, mockAuthorities, 'DEFAULT');
-      expect(result).toBe(false);
-    });
-    it('should reject transaction with invalid meta', () => {
-      const invalidMeta = {
-        version: '1',
-        prefix: 'DEFAULT',
-        initiator: 'ABC123',
-        id: 'wrongHash',
-        iss: defaultIssuer
-      };
-      const metaString = ProtocolMetaParser.serialize(invalidMeta);
-      const memoInstruction = createMemoInstruction(metaString);
-      const transaction = new Transaction();
-      transaction.add(memoInstruction);
-      transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
-      transaction.sign(authority1);
-      // id is wrong, but we only check structure, not id value
-      const result = adapter.validateTransaction(transaction, mockAuthorities, 'DEFAULT');
-      expect(result).toBe(true); // structure is valid, id is not checked here
-    });
-    it('should reject transaction with missing issuer', () => {
-      // Remove iss from meta string
-      const metaString = `${PROTOCOL_PREFIX}:v=1&pre=DEFAULT&ini=ABC123&id=def456`;
-      const memoInstruction = createMemoInstruction(metaString);
-      const transaction = new Transaction();
-      transaction.add(memoInstruction);
-      transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
-      transaction.sign(authority1);
-      const result = adapter.validateTransaction(transaction, mockAuthorities, 'DEFAULT');
-      expect(result).toBe(false);
-    });
-    it('should reject transaction with wrong issuer', () => {
-      const meta = { ...testMeta, iss: 'NOT_AUTHORITY' };
-      const metaString = ProtocolMetaParser.serialize(meta);
-      const memoInstruction = createMemoInstruction(metaString);
-      const transaction = new Transaction();
-      transaction.add(memoInstruction);
-      transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
-      transaction.sign(authority1);
-      const result = adapter.validateTransaction(transaction, mockAuthorities, 'DEFAULT');
-      expect(result).toBe(false);
-    });
-    it('should reject transaction if no signature matches authority', () => {
-      const metaString = ProtocolMetaParser.serialize(testMeta);
-      const memoInstruction = createMemoInstruction(metaString);
-      const transaction = new Transaction();
-      transaction.add(memoInstruction);
-      transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
-      // Sign with a random keypair not in authorities
-      const randomKeypair = Keypair.generate();
-      transaction.sign(randomKeypair);
-      const result = adapter.validateTransaction(transaction, mockAuthorities, 'DEFAULT');
-      expect(result).toBe(false);
-    });
-    it('should validate if issuer signature matches meta.iss', () => {
-      const metaString = ProtocolMetaParser.serialize(testMeta);
-      const memoInstruction = createMemoInstruction(metaString);
-      const transaction = new Transaction();
-      transaction.add(memoInstruction);
-      transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
-      // Sign with the correct authority (feePayer)
-      transaction.feePayer = authority1.publicKey;
-      transaction.sign(authority1);
-      const result = adapter.validateTransaction(transaction, mockAuthorities, 'DEFAULT');
-      expect(result).toBe(true);
-    });
-    it('should reject if issuer signature does not match meta.iss', () => {
-      const meta = { ...testMeta, iss: authority2.publicKey.toBase58() };
-      const metaString = ProtocolMetaParser.serialize(meta);
-      const memoInstruction = createMemoInstruction(metaString);
-      const transaction = new Transaction();
-      transaction.add(memoInstruction);
-      transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
-      // Sign with authority1, but meta.iss is authority2
-      transaction.sign(authority1);
-      const result = adapter.validateTransaction(transaction, mockAuthorities, 'DEFAULT');
-      expect(result).toBe(false);
-    });
-    it('should reject if prefix does not match expected', () => {
-      const meta = { ...testMeta, prefix: 'OTHER' };
-      const metaString = ProtocolMetaParser.serialize(meta);
-      const memoInstruction = createMemoInstruction(metaString);
-      const transaction = new Transaction();
-      transaction.add(memoInstruction);
-      transaction.recentBlockhash = Keypair.generate().publicKey.toBase58();
-      transaction.sign(authority1);
-      const result = adapter.validateTransaction(transaction, mockAuthorities, 'DEFAULT');
-      expect(result).toBe(false);
+
+    describe('versioned transactions', () => {
+      it('should validate versioned transaction with correct meta and issuer in static keys', () => {
+        const metaString = ProtocolMetaParser.serialize(testMeta);
+        const memoInstruction = createMemoInstruction(metaString);
+        
+        const messageV0 = new MessageV0({
+          header: {
+            numRequiredSignatures: 1,
+            numReadonlySignedAccounts: 0,
+            numReadonlyUnsignedAccounts: 1,
+          },
+          staticAccountKeys: [
+            authority1.publicKey, // issuer
+            memoInstruction.programId,
+          ],
+          recentBlockhash: '11111111111111111111111111111111',
+          compiledInstructions: [{
+            programIdIndex: 1,
+            accountKeyIndexes: [],
+            data: memoInstruction.data,
+          }],
+          addressTableLookups: [],
+        });
+
+        const versionedTransaction = new VersionedTransaction(messageV0);
+        const result = adapter.validateTransaction(versionedTransaction, mockAuthorities, 'DEFAULT');
+        expect(result).toBe(true);
+      });
+
+      it('should reject versioned transaction without issuer in static keys', () => {
+        const metaString = ProtocolMetaParser.serialize(testMeta);
+        const memoInstruction = createMemoInstruction(metaString);
+        
+        const messageV0 = new MessageV0({
+          header: {
+            numRequiredSignatures: 1,
+            numReadonlySignedAccounts: 0,
+            numReadonlyUnsignedAccounts: 1,
+          },
+          staticAccountKeys: [
+            // authority1.publicKey is missing - issuer not present
+            memoInstruction.programId,
+          ],
+          recentBlockhash: '11111111111111111111111111111111',
+          compiledInstructions: [{
+            programIdIndex: 0,
+            accountKeyIndexes: [],
+            data: memoInstruction.data,
+          }],
+          addressTableLookups: [],
+        });
+
+        const versionedTransaction = new VersionedTransaction(messageV0);
+        const result = adapter.validateTransaction(versionedTransaction, mockAuthorities, 'DEFAULT');
+        expect(result).toBe(false);
+      });
+
+      it('should reject versioned transaction with wrong issuer', () => {
+        const meta = { ...testMeta, iss: 'NOT_AUTHORITY' };
+        const metaString = ProtocolMetaParser.serialize(meta);
+        const memoInstruction = createMemoInstruction(metaString);
+        
+        const messageV0 = new MessageV0({
+          header: {
+            numRequiredSignatures: 1,
+            numReadonlySignedAccounts: 0,
+            numReadonlyUnsignedAccounts: 1,
+          },
+          staticAccountKeys: [
+            authority1.publicKey, // This is not the issuer in meta
+            memoInstruction.programId,
+          ],
+          recentBlockhash: '11111111111111111111111111111111',
+          compiledInstructions: [{
+            programIdIndex: 1,
+            accountKeyIndexes: [],
+            data: memoInstruction.data,
+          }],
+          addressTableLookups: [],
+        });
+
+        const versionedTransaction = new VersionedTransaction(messageV0);
+        const result = adapter.validateTransaction(versionedTransaction, mockAuthorities, 'DEFAULT');
+        expect(result).toBe(false);
+      });
     });
   });
 
@@ -188,6 +320,48 @@ describe('SolanaAdapter', () => {
       const transaction = SolanaAdapter.createTransactionWithMeta(testMeta);
       const decodedMeta = adapter.decode(transaction);
       expect(decodedMeta).toEqual(testMeta);
+    });
+  });
+
+  describe('createVersionedTransactionWithMeta', () => {
+    it('should create versioned transaction with memo instruction', () => {
+      const versionedTransaction = SolanaAdapter.createVersionedTransactionWithMeta(
+        testMeta,
+        [],
+        authority1.publicKey.toBase58()
+      );
+      expect(versionedTransaction.message).toBeInstanceOf(MessageV0);
+      expect(versionedTransaction.message.compiledInstructions).toHaveLength(1);
+    });
+
+    it('should decode meta from created versioned transaction', () => {
+      const versionedTransaction = SolanaAdapter.createVersionedTransactionWithMeta(
+        testMeta,
+        [],
+        authority1.publicKey.toBase58()
+      );
+      const decodedMeta = adapter.decode(versionedTransaction);
+      expect(decodedMeta).toEqual(testMeta);
+    });
+
+    it('should include fee payer in static account keys', () => {
+      const versionedTransaction = SolanaAdapter.createVersionedTransactionWithMeta(
+        testMeta,
+        [],
+        authority1.publicKey.toBase58()
+      );
+      const message = versionedTransaction.message as MessageV0;
+      expect(message.staticAccountKeys).toContainEqual(authority1.publicKey);
+    });
+
+    it('should include memo program in static account keys', () => {
+      const versionedTransaction = SolanaAdapter.createVersionedTransactionWithMeta(
+        testMeta,
+        [],
+        authority1.publicKey.toBase58()
+      );
+      const message = versionedTransaction.message as MessageV0;
+      expect(message.staticAccountKeys).toContainEqual(MEMO_PROGRAM_ID);
     });
   });
 }); 
