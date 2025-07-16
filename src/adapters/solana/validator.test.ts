@@ -1,9 +1,9 @@
-import { SolanaCodeValidator } from './solana';
-import { CodeValidator } from './validator';
-import { PROTOCOL_PREFIX, CODE_TTL } from '../constants';
+import { SolanaCodeValidator } from './validator';
+import { CodeValidator } from '../../validation/validator';
+import { PROTOCOL_PREFIX, CODE_TTL } from '../../constants';
 import nacl from 'tweetnacl';
 import { Keypair } from '@solana/web3.js';
-import { CodeGenerator } from '../codegen';
+import { CodeGenerator } from '../../codegen';
 
 describe('SolanaCodeValidator', () => {
     let keypair: Keypair;

@@ -1,8 +1,8 @@
 import { Transaction, TransactionInstruction, PublicKey, Keypair } from '@solana/web3.js';
 import { createMemoInstruction, MEMO_PROGRAM_ID } from '@solana/spl-memo';
 import { SolanaAdapter } from './solana';
-import { ProtocolMetaV1, ProtocolMetaParser } from '../meta';
-import { PROTOCOL_PREFIX } from '../constants';
+import { ProtocolMetaV1, ProtocolMetaParser } from '../../meta';
+import { PROTOCOL_PREFIX } from '../../constants';
 
 describe('SolanaAdapter', () => {
   let adapter: SolanaAdapter;

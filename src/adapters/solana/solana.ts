@@ -3,7 +3,7 @@ import {
     TransactionInstruction,
 } from '@solana/web3.js';
 import { createMemoInstruction, MEMO_PROGRAM_ID } from '@solana/spl-memo';
-import { ProtocolMetaV1, ProtocolMetaParser, ChainAdapter } from '../meta';
+import { ProtocolMetaV1, ProtocolMetaParser, ChainAdapter } from '../../meta';
 
 /**
  * Solana adapter for protocol meta using memo program
